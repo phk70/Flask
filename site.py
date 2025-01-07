@@ -1,15 +1,18 @@
-from flask import Flask
+from flask import Flask, render_template
+
 
 app = Flask(__name__)  # Создаем экземпляр класса Flask (приложение)
 
-@app.riute('/index')  # Декоратор, который связывает URL со функцией. По адресу '/index' будет вызываться функция index  
+
 @app.route('/')  # Декоратор, который связывает URL со функцией. По адресу '/' будет вызываться функция index
 def index():
-    return 'Домашняя страница'  # Возвращает просто строку 'Домашняя страница'
+    return render_template('index.html')  # Возвращает HTML-шаблон с именем 'index.html'
+
 
 @app.route('/about')  # Декоратор, который связывает URL со функцией. По адресу '/about' будет вызываться функция about
 def about():
-    return '<h1>О нас</h1>'  # Возвращает просто заголовок 'О нас'
+    return render_templates('about.html')  # Возвращает HTML-шаблон с именем 'about.html'
+
 
 if __name__ == '__main__':
     app.run(debug=True)  # Запускаем приложение
