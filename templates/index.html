@@ -1,24 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% if title %}
-        <title>Первый сайт - {{ title }}</title>
-    {% else %}
-        <title>Первый сайт</title>
-    {% endif %}
-</head>
-<body>
-    <ul>
-        {% for m in menu %}
-        <li>{{m}}</li>
-        {% endfor %}
-    </ul>
-    {% if title %}
-        <h1>{{ title }}</h1>
-    {% else %}
-        <h1>Первый сайт - Главная страница</h1>
-    {% endif %}    
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+{{ super() }}
+<p>Cодержимое главной страницы</p>
+{% endblock content %}

@@ -126,8 +126,57 @@ def index():
 
 <!-- Тоже самое делаем для about -->
 
+<!-- Делаем БАЗОВЫЙ шаблон base.html. Он содержит основную информацию, для предотвращения повторений ее в коде других страниц 
+Все разбивается на блоки, которые потом будут заполняться или останутся с тем что задано, если этот блок не указан в определенном шаблоне-->
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block title %}
+    {% if title %}
+        <title>Первый сайт - {{ title }}</title>
+    {% else %}
+        <title>Первый сайт</title>
+    {% endif %}
+    {% endblock title %}
+</head>
+<body>
+    {% block content %}
+    {% block mainmenu %}
+    <ul>        
+        {% for m in menu %}
+        <li>{{m}}</li>
+        {% endfor %}
+    </ul>
+    {% endblock mainmenu %}
+    {% if title %}
+        <h1>{{ title }}</h1>
+    {% else %}
+        <h1>Первый сайт - Главная страница</h1>
+    {% endif %}   
+    {% endblock content %} 
+</body>
+</html>
 
+<!-- Перепишем шаблон index. Благодаря super() отображает то что было в базовом шаблоне, а не просто заменяет содержимым блока content) -->
+
+{% extends "base.html" %}
+
+{% block content %}
+{{ super() }}
+<p>Cодержимое главной страницы</p>
+{% endblock content %}
+
+<!-- Перепишем шаблон about -->
+
+{% extends "base.html" %}
+
+{% block content %}
+{{ super() }}
+<p>Cодержимое страницы о нас</p>
+{% endblock content %}
 
 
 
