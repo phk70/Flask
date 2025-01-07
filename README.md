@@ -49,5 +49,50 @@ def index():
 def about():
     return render_templates('about.html')  # Возвращает HTML-шаблон с именем 'about.html'
 
+<!-- Параметры передаются в шаблоны с помощию {{ }}
+Установим для title и заголовка h1 в обоих шаблонах -->
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> {{ title }} </title>
+</head>
+<body>
+    <h1> {{ title }} </h1>
+</body>
+</html>
+
+<!-- И при передаче шаблона установим значение параметра title -->
+
+@app.route('/')  # Декоратор, который связывает URL со функцией. По адресу '/' будет вызываться функция index
+def index():
+    return render_template('index.html', title='Главная страница')  # Возвращает HTML-шаблон с именем 'index.html' и переменной title в параметрах
+
+
+@app.route('/about')  # Декоратор, который связывает URL со функцией. По адресу '/about' будет вызываться функция about
+def about():
+    return render_templates('about.html', title='О нас')  # Возвращает HTML-шаблон с именем 'about.html' и переменной title в параметрах
+
+<!-- Передадим список в шаблон. Выражения в шаблонах помещаются в {% %}. В конце обязательно закрытие выражения {% end... %} -->
+
+</head>
+<body>
+    <ul>
+        {% for m in menu %}
+        <li>{{m}}</li>
+        {% endfor %}
+    </ul>
+    <h1> {{ title }} </h1>
+</body>
+</html>
+
+<!-- В коде пропишем этот список menu и укажем его так же при передаче шаблона. Укажем новый параметр menu и передадим в него наш список -->
+
+menu = ['Главная', 'О нас', 'Контакты']
+
+@app.route('/')  # Декоратор, который связывает URL со функцией. По адресу '/' будет вызываться функция index
+def index():
+    return render_template('index.html', title='Главная страница', menu=menu)
 
