@@ -73,7 +73,7 @@ def index():
 
 @app.route('/about')  # Декоратор, который связывает URL со функцией. По адресу '/about' будет вызываться функция about
 def about():
-    return render_templates('about.html', title='О нас')  # Возвращает HTML-шаблон с именем 'about.html' и переменной title в параметрах
+    return render_template('about.html', title='О нас')  # Возвращает HTML-шаблон с именем 'about.html' и переменной title в параметрах
 
 <!-- Передадим список в шаблон. Выражения в шаблонах помещаются в {% %}. В конце обязательно закрытие выражения {% end... %} -->
 
@@ -95,4 +95,47 @@ menu = ['Главная', 'О нас', 'Контакты']
 @app.route('/')  # Декоратор, который связывает URL со функцией. По адресу '/' будет вызываться функция index
 def index():
     return render_template('index.html', title='Главная страница', menu=menu)
+
+<!-- Немного усложним. Добавим условие if. Если передаем параметр title в обработчик - получаем Первый сайт - {{ title }}.
+Если title не передается, то просто пишется заранее подготовленный текст "Первый сайт" -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% if title %}
+        <title>Первый сайт - {{ title }}</title>
+    {% else %}
+        <title>Первый сайт</title>
+    {% endif %}
+</head>
+
+<!-- Примерно тоже самое сделаем для body -->
+
+<body>
+    <ul>
+        {% for m in menu %}
+        <li>{{m}}</li>
+        {% endfor %}
+    </ul>
+    {% if title %}
+        <h1>{{ title }}</h1>
+    {% else %}
+        <h1>Первый сайт - Главная страница</h1>
+    {% endif %}    
+</body>
+
+<!-- Тоже самое делаем для about -->
+
+
+
+
+
+
+
+
+
+
+
+
+
 
