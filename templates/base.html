@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% block title %}
@@ -14,17 +15,20 @@
 <body>
     {% block content %}
     {% block mainmenu %}
-    <ul>        
+    <ul class='mainmenu'>        
         {% for m in menu %}
         <li>{{m}}</li>
         {% endfor %}
     </ul>
     {% endblock mainmenu %}
-    {% if title %}
-        <h1>{{ title }}</h1>
-    {% else %}
-        <h1>Первый сайт - Главная страница</h1>
-    {% endif %}   
-    {% endblock content %} 
+    <div class='clear'></div>
+    <div class="content">
+        {% if title %}
+            <h1>{{ title }}</h1>
+        {% else %}
+            <h1>Первый сайт - Главная страница</h1>
+        {% endif %}   
+        {% endblock content %} 
+    </div>
 </body>
 </html>
