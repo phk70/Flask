@@ -1,4 +1,4 @@
-from flask import Flask, flash, render_template, url_for, request
+from flask import Flask, flash, render_template, url_for, request, session, redirect, abort
 
 
 app = Flask(__name__)  # Создаем экземпляр класса Flask (приложение)
@@ -30,6 +30,24 @@ def contact():
             flash('Ошибка отправки', category='error')  # Выводим сообщение если ошибка 
 
     return render_template('contact.html', title='Обратная связь', menu=menu)  # Возвращает HTML-шаблон с именем 'contact.html' и дополнительными параметрами title и menu
+
+
+@app.route('/login', methods=['POST', 'GET'])  # По адресу '/login' будет вызываться функция login
+def login():
+    if 'userLogged' in session:  # Проверяем что пользователь уже вошел
+        return redirect(url_for('profile', username=session['userLogged']))  # Перенаправляем на страницу профиля
+    elif request.method == 'POST' and request.form['username'] == 'qwe' and request.form['psw'] == '123':  # Проверяем что передается метод post + проверяем что username равен qwe и password равен 123
+        session['userLogged'] = request.form['username']  # Записываем в сессию имя пользователя
+        return redirect(url_for('profile', username=session['userLogged']))  # Перенаправляем на страницу профиля
+    
+    return render_template('login.html', title='Вход', menu=menu)  # Возвращает HTML-шаблон с именем 'login.html' и дополнительными параметрами title и menu
+
+
+@app.route('/profile/<username>')
+def profile(username):
+    if 'userLogged' not in session or session['userLogged'] != username:  # Проверяем что пользователь тот который в запросе get
+        abort(401)
+    return f'Профиль пользователя {username}'
 
 
 @app.errorhandler(404)  # Декоратор, который связывает URL со функцией. По адресу '/404' будет вызываться функция page_not_found

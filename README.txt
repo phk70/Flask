@@ -436,7 +436,7 @@ category_filter - список разрешенных категорий при 
 ******************************************************************************************************************************************
 ******************************************************************************************************************************************
 ******************************************************************************************************************************************
-7. Декоратор errorhandler, функции redirect и abort
+7. Декоратор errorhandler. 
 
 Отлавливание ошибок сервера. Меняем стандартные страницы 404 и др. на кастомные.
 
@@ -453,13 +453,60 @@ category_filter - список разрешенных категорий при 
 запросили не существующую страницу - в return после скобок указывается код который нужно вернуть (404)
 
 
+Функции redirect и abort.
+Используется например после регистрации, чтобы пользователя сразу перекидывало на страницу профиля.
+
+http://127.0.0.1:5000/login  -->  http://127.0.0.1:5000/profile/<username>
+
+Реализуем:
+Создадим шаблоны login.html 
+
+            {% extends 'base.html' %}
+
+            {% block content %}
+            {{ super() }}
+
+            <form action='/login' method='post' class='form-contact'>
+                <p><label>Имя: </label> <input type="text" name='username' value='' requied>
+                <p><label>Пароль: </label><input type="password" name='psw' value='' requied>
+                <p><input type="submit" value='Войти'>
+            </form>
+            {% endblock content %}  
 
 
+Пропишем простую страницу с профилем пользователя:
+
+            @app.route('/profile/<username>')
+            def profile(usernsme):
+                return f'Профиль пользователя {username}'
 
 
+Пропишем обработчик регистрации с перенаправлениями.
+userLogged - проверка зарегистрирован ли пользователь в сессии.
+
+from flask import session, redirect
+
+            @app.route('/login', methods=['POST', 'GET'])
+            def login():
+                if 'userLogged' in session:
+                    return redirect(url_for('profile', username=session['userLogged']))
+                elif request.method == 'POST' and request.form['username'] == 'qwe' and request.form['password'] == '123':
+                    session['userLogged'] = request.form['username']
+                    return redirect(url_for('profile', username=session['userLogged']))
+                
+                return render_template('login.html', title='Вход', menu=menu)
 
 
+Сделаем защиту от того чтобы пользователь получал доступ к другим профайлам через гет запрос.
+Для этого делаем дополнительную проверку в профиле.
 
+            from flask import abort
+
+            @app.route('/profile/<username>')
+            def profile(username):
+                if 'userLogged' not in session or session['userLogged'] != username:  # Проверяем что пользователь тот который в запросе get
+                    abort(401)
+                return f'Профиль пользователя {username}'
 
 
 
