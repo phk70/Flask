@@ -3,7 +3,9 @@ from flask import Flask, render_template, url_for
 
 app = Flask(__name__)  # Создаем экземпляр класса Flask (приложение)
 
-menu = ['Главная', 'О нас', 'Контакты']
+menu = [{'name': 'Установка', 'url': 'install-flask'},
+        {'name': 'Первое приложение', 'url': 'first-app'},
+        {'name': 'Обратная связь', 'url': 'contact'}]  # Меню с ссылками на другие страницы.
 
 @app.route('/')  # Декоратор, который связывает URL со функцией. По адресу '/' будет вызываться функция index
 def index():
