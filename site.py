@@ -32,6 +32,12 @@ def contact():
     return render_template('contact.html', title='Обратная связь', menu=menu)  # Возвращает HTML-шаблон с именем 'contact.html' и дополнительными параметрами title и menu
 
 
+@app.errorhandler(404)  # Декоратор, который связывает URL со функцией. По адресу '/404' будет вызываться функция page_not_found
+def page_not_found(error):
+    return render_template('page404.html', title='Страница не найдена', menu=menu), 404    
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)  # Запускаем приложение
 
