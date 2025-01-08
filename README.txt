@@ -322,6 +322,55 @@ menu = [{'name': 'Установка', 'url': 'install-flask'},
     </ul>
 
 
+ФОРМЫ
+
+Формы в html прописываются следующим образом:
+
+    <form action='/handler' method='POST'>
+    ....
+    <input type='submit' value='Отправить'>
+    </form>
+
+'/handler' - url который принимает данные от Формы
+'POST' - метод (отправка)
+'submit' - отправляет данные формы на сервер
+
+Добавим на страницу форму обратной связи в файле contact.html
+    
+    {% extends 'base.html' %}
+
+    {% block content %}
+    {{super()}}
+    <form action='/contact' method='post' class='form-contact'>
+        <p><label>Имя: </label> <input type="text" name='username' value='' requied>
+        <p><label>Email: </label><input type="text" name='email' value='' requied>
+        <p><label>Сообщение: </label>
+        <p><textarea name="message" rows=7 cols=40></textarea>
+        <p><input type="submit" value='Отправить'>
+    </form>
+    {% endblock content %}
+
+Добавляем обработчик для страницы contact
+
+    @app.route('/contact')
+    def contact():
+        return render_template('contact.html', title='Обратная связь', menu=menu)
+
+При отправке будет ошибка, т.к. для метода  POST обработчику необходимо это прямо указать.
+А так же проверим что передается именно метод post. И поймаем через print что именно передается.
+
+    from flask import Flask request
+
+    @app.route('/contact', methods=['POST', 'GET'])
+    def contact():
+        if request.method == 'POST':
+            print(request.form)  # Печатаем данные формы
+            print(request.form['username'])  # Печатаем значение поля username
+
+        return render_template('contact.html', title='Обратная связь', menu=menu)
+
+В атрибуте methods в списке указываются все разрешенные методы.
+Через request можно обратиться к какому либо атрибуту в данном запросе.
 
 
 
